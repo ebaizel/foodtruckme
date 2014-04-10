@@ -1,0 +1,21 @@
+doctype html
+html(ng-app="truckApp")
+	head
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		title Food Truck Me
+
+		link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+		link(rel='stylesheet', href='/stylesheets/bootstrap-theme.min.css')
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		
+		script(src="http://code.jquery.com/jquery-1.11.0.min.js")
+		script(src="https://maps.googleapis.com/maps/api/js?sensor=false&v=3&libraries=geometry")
+		script(src="/javascripts/lib/underscore-min.js")
+		script(src="/javascripts/lib/angular.min.js")
+		script(src="/javascripts/lib/bootstrap.min.js")
+		script(src="/javascripts/angDirectives.js")
+		script(src="/javascripts/angControllers.js")
+		script(src="/javascripts/angApp.js")
+
+	body
+		block content
