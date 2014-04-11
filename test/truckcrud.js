@@ -147,9 +147,10 @@ describe('Truck', function() {
 		it('should find trucks within a search radius', function(done) {
 			var req = {};
 			req.query = {
-				lon: -122.489324, // Outer Sunset; only one food truck permit here
-				lat: 37.783702,
-				distance : .1
+				nelon: -122.487425,
+				nelat: 37.785618,
+				swlon: -122.493433,
+				swlat: 37.781582
 			};
 
 			trucksvc.getTrucks(req, function(err, trucks) {
@@ -164,10 +165,12 @@ describe('Truck', function() {
 		it('should not find any trucks near Moscow', function(done) {
 			var req = {};
 			req.query = {
-				lon : 37.6173, // Moscow, Russia
-				lat : 55.755826,
-				distance : 5
+				nelon: 37.644511,
+				nelat: 55.770655,
+				swlon: 37.594729,
+				swlat: 55.734331
 			};
+
 			trucksvc.getTrucks(req, function(err, trucks) {
 				expect(err).to.be.null;
 				expect(trucks.results).not.to.be.null;
@@ -176,18 +179,32 @@ describe('Truck', function() {
 			});
 		});
 
-		it('should search by address', function(done) {
+		it('should geocode address', function(done) {
 			var req = {};
 			req.query = {
 				address: '2000 Broadway, San Francisco, CA'
 			};
 
-			trucksvc.getTrucks(req, function(err, trucks) {
+			trucksvc.geoCodeAddress(req, function(err, location) {
 				expect(err).to.be.null;
-				expect(trucks.results).not.to.be.null;
-				expect(trucks.results).to.have.length.above(0);
+				expect(location).not.to.be.null;
+				expect(location.lat).to.equal(37.7948214);
+				expect(location.lon).to.equal(-122.4300252);
 				done();				
 			});
 		});
+
+		it('should handle geocoding invalid address', function(done) {
+			var req = {};
+			req.query = {
+				address: 'deathstarinthesky'
+			};
+
+			trucksvc.geoCodeAddress(req, function(err, location) {
+				expect(err).not.to.be.null;
+				expect(location).to.be.null;
+				done();				
+			});
+		});		
 	});
 });

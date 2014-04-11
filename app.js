@@ -75,6 +75,7 @@ app.use(errorHandler);
 
 app.get('/', routes.index);
 app.get('/truck', routes.getTrucks);
+app.get('/geocode', routes.geoCodeAddress)
 
 /**
  * Configure the app

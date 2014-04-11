@@ -5,15 +5,21 @@ block content
 		div#header.visible-md.visible-lg
 			h1 Food Truck Me
 		div.row.visible-xs.visible-sm
-			div.col-xs-2
+			div.col-xs-3
 				h4 FoodTruckMe
-			div.col-xs-7.col-xs-offset-3.input-append
-				input.searchbarshort(type="search", placeholder="enter an address", ng-model="address")			
-				button.btn.btn-default(type="submit", ng-click="searchByAddress()") Submit
+			div.col-xs-9.input-append
+				input.searchbarshort(type="search", placeholder="enter an address", ng-model="address")
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="searchByAddress()") Search
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="displayTrucksNearUser()") Nearby
+				label.flashMessage
+					{{flashMessage}}
 		div.row.visible-md.visible-lg
 			div.col-md-7.input-append
 				input.searchbarlong(type="search", placeholder="enter an address", ng-model="address")
-				button.btn.btn-default(type="submit", ng-click="searchByAddress()") Search
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="searchByAddress()") Search
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="displayTrucksNearUser()") Nearby
+				label.flashMessage
+					{{flashMessage}}
 			div.col-md-5
 				div.row
 					div.col-md-2
@@ -35,7 +41,7 @@ block content
 							p {{truck.desc}}
 		div.row.visible-xs.visible-sm
 			div.col-xs-4
-				button.btn.btn-default(ng-click="refreshMarkers()") Redo search
+				button.btn.btn-default(ng-disabled="false", ng-click="refreshMarkers()") Redo search
 			div.col-xs-4.col-xs-offset-1
 				button.btn.btn-default(ng-click="prevPage()", ng-disabled="!(currentPage > 0)") {{prevText()}}
 				button.btn.btn-default(ng-click="nextPage()", ng-disabled="!hasMore()") {{nextText()}}

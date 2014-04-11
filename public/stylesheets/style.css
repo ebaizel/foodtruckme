@@ -11,11 +11,11 @@ body {
 }
 
 .searchbarshort {
-	width: 250px;
+	width: 150px;
 }
 
 .searchbarlong {
-	width: 488px;
+	width: 310px;
 }
 
 tr.item:hover {
@@ -29,4 +29,10 @@ div.itemlist {
 
 .infobutton {
 	color: black;
+}
+
+.flashMessage {
+	font-style: italic;
+	font-weight: normal;
+	color: grey;
 }

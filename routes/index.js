@@ -19,3 +19,20 @@ exports.getTrucks = function(req, res) {
 		}
 	});
 }
+
+exports.geoCodeAddress = function(req, res) {
+	trucksvc.geoCodeAddress(req, function(err, geo) {
+		if (err) {
+			res.json(500, {
+				status: "error",
+				message: err.message
+			});
+		} else {
+			res.json(200, {
+				status: "success",
+				lat: geo.lat,
+				lon: geo.lon
+			});
+		}
+	})
+}

@@ -9,38 +9,27 @@ exports.getTrucks = function(req, cb) {
 	var limit;
 	var pageStart;
 
-	for (var key in req.query) {
-
-		if (key === 'lon' || key === 'lat' || key === 'distance' || key === 'address') {
-			continue;
-		} else if (key == "limit") {
-			limit = req.query[key];
-		} else if (key == "pageStart") {
-			pageStart = req.query[key];			
-		} else {
-			if (req.query.hasOwnProperty(key)) {
-				conditions[key] = new RegExp('^' + req.query[key] + '$', 'i');
-			}
+	if (req.query) {
+		if (req.query.limit) {
+			limit = req.query.limit;
 		}
-	}
-
-	// Handle location search
-	if (req.query && req.query.hasOwnProperty('lon') && req.query.hasOwnProperty('lat')) {
-		var distance = (req.query.distance ? req.query.distance : 5); // default 5 mile radius search
-		conditions['loc'] = {
-			$near:[req.query.lon, req.query.lat],
-			$maxDistance: distance / 69
-		};
-	}
-
-	if (req.query && req.query.address) {
-		geoCodeAddress(req.query.address, function(latlon) {
-			var distance = (req.query.distance ? req.query.distance : 5); // default 5 mile radius search		
+		if (req.query.pageStart) {
+			pageStart = req.query.pageStart;
+		}
+		if (req.query.status) {
+			conditions['status'] = new RegExp('^' + req.query.status + '$', 'i');
+		}
+		if (req.query.name) {
+			conditions['name'] = new RegExp('^' + req.query.name + '$', 'i');
+		}
+		if (req.query.nelon && req.query.nelat && req.query.swlon && req.query.swlat) {
 			conditions['loc'] = {
-				$near:[latlon.lon, latlon.lat],
-				$maxDistance: distance / 69
+				$geoWithin: {
+					$box: [[parseFloat(req.query.swlon), parseFloat(req.query.swlat)],
+						[parseFloat(req.query.nelon), parseFloat(req.query.nelat)]]
+				}
 			};
-		})
+		}
 	}
 
 	async.parallel({
@@ -92,14 +81,32 @@ exports.refreshTruckData = function(cb) {
 	});
 }
 
-var geoCodeAddress = function(address, cb) {
-	
-	//TODO: geoCode the address into a lat/lon
-	var latlon = {
-		lon: -122.4167,
-		lat: 37.7833
-	};
-	cb(latlon);
+exports.geoCodeAddress = function(req, cb) {
+
+	if (req.query.address) {
+		request('https://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=' + req.query.address, 
+			function(error, response, body) {
+			
+			if (!error && response.statusCode == 200) {
+				var results = JSON.parse(body);
+				if (results.status != "OK") {
+					cb(new Error('Could not resolve address'), null);
+				} else {
+					var geometry = results.results[0].geometry;
+					var latlon = {
+						lon: geometry.location.lng,
+						lat: geometry.location.lat
+					};
+
+					cb(null, latlon);
+				}
+			} else {
+				cb(error, null);
+			}
+		});
+	} else {
+		cb(new Error('Missing address'), null);
+	}
 }
 
 var loadDataFromJSON = function(data, cb) {
