@@ -5,4 +5,6 @@ node_js:
   - "0.8"
   - "0.6"
 services:
-  - mongodb  
+  - mongodb
+env: 
+ - env=development socratatoken=O5Aqf5XUCpkgRQgOrv6nMiWTQ
