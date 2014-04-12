@@ -171,7 +171,7 @@ angular.module('truckApp.controllers', []).
 				$scope.lat = data.lat;
 				$scope.lon = data.lon;
 				$scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lon));
-				$scope.map.setZoom(14);
+				$scope.map.setZoom(16);
 				$scope.mapMoved(true);
 			}).
 			error(function (data, status, headers, config) {

@@ -1,7 +1,6 @@
 var ObjectId = require('mongoose').Types.ObjectId;
 var request = require('request');
 var async = require('async');
-var socratatoken = require('../creds').socratatoken;
 
 exports.getTrucks = function(req, cb) {
 
@@ -39,9 +38,9 @@ exports.getTrucks = function(req, cb) {
 			});
 		},
 		countTrucks: function(pcb) {
-			Truck.find(conditions).limit(1000).exec(function(err, trucks) {
-				pcb(err, trucks.length);
-			}); // can't use Mongoose count because it maxes at 100
+			Truck.count(conditions).exec(function(err, trucks) {
+				pcb(err, trucks);
+			});
 		}
 	}, function(err, results) {
 		if (err) {

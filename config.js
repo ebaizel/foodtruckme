@@ -16,5 +16,6 @@ global.closeDB = function(db) {
 
 module.exports = function(app) {
 	global.db = getDB(app.locals.dburi);
+	global.socratatoken = app.locals.socratatoken;
 	global.Truck = global.db.model('Truck', models.truckSchema);
 }

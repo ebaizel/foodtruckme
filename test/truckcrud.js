@@ -5,6 +5,8 @@ var mongoose = require('mongoose');
 var testdata = require('../foodtrucks.json');
 var async = require('async');
 
+global.socratatoken = require('../creds').socratatoken;
+
 var db = mongoose.createConnection('localhost/foodtrucktest');
 db.on('error', console.error.bind(console, 'connection error:'));
 global.Truck = db.model('Truck', models.truckSchema);

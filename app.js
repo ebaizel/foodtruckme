@@ -28,7 +28,8 @@ if (app.get('env') === 'development') {
 	app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
 	app.locals.pretty = true;
 	app.locals.port = 1083;
-	app.locals.dburi = creds.dburidev;
+	app.locals.dburi = (process.env.dburidev ? process.env.dburidev : creds.dburidev);
+  app.locals.socratatoken = (process.env.socratatoken ? process.env.socratatoken : creds.socratatoken);
 }
 
 // production only
@@ -36,7 +37,8 @@ if (app.get('env') === 'production') {
 	app.use(express.errorHandler());
 	app.locals.pretty = false;
 	app.locals.port = 80;
-	app.locals.dburi = creds.dburiprod;
+	app.locals.dburi = (process.env.dburiprod ? process.env.dburiprod : creds.dburiprod);
+  app.locals.socratatoken = (process.env.socratatoken ? process.env.socratatoken : creds.socratatoken);
 };
 
 /*
@@ -49,25 +51,14 @@ var logErrors = function(err, req, res, next) {
 };
 
 var clientErrorHandler = function(err, req, res, next) {
-  if (req.xhr != null) {
-    res.send(500, {
-      error: 'Whoops!  Something went awry.'
-    });
-  } else {
-    next(err);
-  }
-};
-
-var errorHandler = function(err, req, res, next) {
-  res.status(500);
-  res.render('error', {
+  res.json(500, {
     error: err
   });
 };
 
 app.use(logErrors);
 app.use(clientErrorHandler);
-app.use(errorHandler);
+//app.use(errorHandler);
 
 /**
  * Routes
