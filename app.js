@@ -36,7 +36,7 @@ if (app.get('env') === 'development') {
 if (app.get('env') === 'production') {
 	app.use(express.errorHandler());
 	app.locals.pretty = false;
-	app.locals.port = 80;
+	app.locals.port = process.env.PORT | 80;
 	app.locals.dburi = (process.env.dburiprod ? process.env.dburiprod : creds.dburiprod);
   app.locals.socratatoken = (process.env.socratatoken ? process.env.socratatoken : creds.socratatoken);
 };
