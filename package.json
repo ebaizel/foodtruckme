@@ -5,6 +5,9 @@
   "scripts": {
     "start": "node app.js"
   },
+  "scripts": {
+    "test": "make test"
+  },  
   "dependencies": {
     "express": "3.3.4",
     "jade": "*",
