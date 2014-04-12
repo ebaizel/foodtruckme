@@ -50,23 +50,30 @@ var logErrors = function(err, req, res, next) {
   next(err);
 };
 
-var clientErrorHandler = function(err, req, res, next) {
-  res.json(500, {
-    error: err
-  });
-};
+function clientErrorHandler(err, req, res, next) {
+  if (req.xhr) {
+    res.send(500, { error: err });
+  } else {
+    next(err);
+  }
+}
+
+function errorHandler(err, req, res, next) {
+  res.status(500);
+  res.render('error', { error: err });
+}
 
 app.use(logErrors);
 app.use(clientErrorHandler);
-//app.use(errorHandler);
+app.use(errorHandler);
 
 /**
  * Routes
  */
 
 app.get('/', routes.index);
-app.get('/truck', routes.getTrucks);
-app.get('/geocode', routes.geoCodeAddress)
+app.get('/truck', routes.getTrucks);  //see truck svc for query params
+app.get('/geocode', routes.geoCodeAddress);
 
 /**
  * Configure the app

@@ -4,12 +4,10 @@ angular.module('truckApp.controllers', []).
 		$scope.currentPage = 0;  // pagination
 		$scope.limit = 10;  // search results to query for
 		$scope.autoMove = false;  //redo search when map moves
-		$scope.trucks = null;
-		$scope.totalTrucks;
-		$scope.address = 'San Francisco, CA';
-		$scope.lat = 37.7749;
-		$scope.lon = -122.419;
-		$scope.nelat;
+		$scope.trucks = null;  // model
+		$scope.totalTrucks;  // total trucks; used for pagination
+		$scope.address = 'San Francisco, CA';  // default address
+		$scope.nelat;  // coords of map box
 		$scope.nelon;
 		$scope.swlat;
 		$scope.swlon;
@@ -38,12 +36,8 @@ angular.module('truckApp.controllers', []).
 
 				$scope.flashMessage = 'Locating...';
 				navigator.geolocation.getCurrentPosition(function(position) {
-
 					$scope.flashMessage = '';
-
-					$scope.lat = position.coords.latitude;
-					$scope.lon = position.coords.longitude;
-					$scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lon));
+					$scope.map.setCenter(new google.maps.LatLng(position.coords.latitude, position.coords.longitude));					
 					$scope.map.setZoom(14);
 					$scope.mapMoved(true);
 				});
@@ -168,9 +162,7 @@ angular.module('truckApp.controllers', []).
 			}).
 			success(function (data, status, headers, config) {
 				$scope.flashMessage = '';
-				$scope.lat = data.lat;
-				$scope.lon = data.lon;
-				$scope.map.setCenter(new google.maps.LatLng($scope.lat, $scope.lon));
+				$scope.map.setCenter(new google.maps.LatLng(data.lat, data.lon));				
 				$scope.map.setZoom(16);
 				$scope.mapMoved(true);
 			}).

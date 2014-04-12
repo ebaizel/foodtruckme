@@ -2,6 +2,13 @@ var ObjectId = require('mongoose').Types.ObjectId;
 var request = require('request');
 var async = require('async');
 
+// Service tier for getting food trucks
+// All query parameters are optional; returns all trucks if no query params
+//		name - name of the food truck, e.g. name=Curry%20Up%20Now
+//		status - APPROVED or EXPIRED or PENDING, e.g. status=APPROVED
+// 		limit - number of results to return, e.g. limit=20
+//		pageStart - for pagination, e.g. pageStart=0
+//		nelon, nelat, swlon, swlat - for location based search; all must be specified
 exports.getTrucks = function(req, cb) {
 
 	var conditions = {};
@@ -54,6 +61,7 @@ exports.getTrucks = function(req, cb) {
 	});
 }
 
+// Fetches data from sfgov and refreshes the database
 exports.refreshTruckData = function(cb) {
 
 	request('http://data.sfgov.org/resource/rqzj-sfat.json?$$app_token=' + socratatoken, function(error, response, body) {
@@ -80,6 +88,9 @@ exports.refreshTruckData = function(cb) {
 	});
 }
 
+// Geocodes an address
+// Send in the address as an encoded address string
+// e.g. address=123%20Main%20Street
 exports.geoCodeAddress = function(req, cb) {
 
 	if (req.query.address) {
