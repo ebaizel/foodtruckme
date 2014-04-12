@@ -7,4 +7,4 @@ node_js:
 services:
   - mongodb
 env: 
- - env=development socratatoken=O5Aqf5XUCpkgRQgOrv6nMiWTQ
+ - env=development socratatoken="O5Aqf5XUCpkgRQgOrv6nMiWTQ"
