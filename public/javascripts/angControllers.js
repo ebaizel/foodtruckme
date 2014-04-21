@@ -12,6 +12,11 @@ angular.module('truckApp.controllers', []).
 		$scope.swlat;
 		$scope.swlon;
 
+		// Info bubble; always only max one on the map
+		var infowindow = new google.maps.InfoWindow();
+		var iwOffset = new google.maps.Size(0, -20);
+		infowindow.setOptions({ disableAutoPan: true, pixelOffset: iwOffset});
+
 		$scope.toggleAutoMove = function() {
 			$scope.autoMove = !($scope.autoMove);
 		}
@@ -101,9 +106,6 @@ angular.module('truckApp.controllers', []).
 				clearMapMarkers();
 				$scope.markers = [];
 
-				var infowindow = new google.maps.InfoWindow();
-				var iwOffset = new google.maps.Size(0, -20);
-				infowindow.setOptions({ disableAutoPan: true, pixelOffset: iwOffset});
 				var results = data.results;
 
 				for (var i=0; i < results.length; i++) {
@@ -178,6 +180,8 @@ angular.module('truckApp.controllers', []).
 
 		// Sets the map on all markers in the array.
 		function clearMapMarkers() {
+
+			infowindow.close();			
 			if ($scope.markers) {
 				for (var i = 0; i < $scope.markers.length; i++) {
 					$scope.markers[i].setMap(null);
