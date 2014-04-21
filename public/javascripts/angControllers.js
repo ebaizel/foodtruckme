@@ -6,7 +6,7 @@ angular.module('truckApp.controllers', []).
 		$scope.autoMove = false;  //redo search when map moves
 		$scope.trucks = null;  // model
 		$scope.totalTrucks;  // total trucks; used for pagination
-		$scope.address = 'San Francisco, CA';  // default address
+		$scope.address = 'San Francisco CA';  // default address
 		$scope.nelat;  // coords of map box
 		$scope.nelon;
 		$scope.swlat;
