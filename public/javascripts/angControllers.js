@@ -102,6 +102,8 @@ angular.module('truckApp.controllers', []).
 				$scope.markers = [];
 
 				var infowindow = new google.maps.InfoWindow();
+				var iwOffset = new google.maps.Size(0, -20);
+				infowindow.setOptions({ disableAutoPan: true, pixelOffset: iwOffset});
 				var results = data.results;
 
 				for (var i=0; i < results.length; i++) {
@@ -115,8 +117,10 @@ angular.module('truckApp.controllers', []).
 					google.maps.event.addListener(marker, 'click', (function(marker, i) {
 						return function() {
 							infowindow.setContent(getTruckContent(results[i]));
-							infowindow.setOptions({ disableAutoPan: true});
-							infowindow.open($scope.map, marker);
+							if (!infowindow.getMap()) {
+								infowindow.open($scope.map);
+							}
+							infowindow.setPosition(marker.position);
 						};
 					})(marker, i));
 					$scope.markers.push(marker);

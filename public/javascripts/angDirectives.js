@@ -13,7 +13,6 @@ angular.module('truckApp.directives', []).
 	            };
 	            scope.map = new google.maps.Map(document.getElementById(attrs.id), myOptions);
 				var geocoder = new google.maps.Geocoder();
-				var infowindow = new google.maps.InfoWindow();
 
 				google.maps.event.addListener(scope.map, 'idle', function() {
 					scope.mapMoved();
