@@ -1,0 +1,64 @@
+extends layout
+
+block content
+	div(ng-controller="TruckCtrl")
+		div.row
+			div.col-xs-12
+				h4.title FoodTruckMe 
+				span.subtext find food trucks near me
+		div.row				
+			div.col-xs-12.col-md-7.input-append
+				input.searchbar(type="search", placeholder="enter an address", ng-model="address")
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="searchByAddress()") Search
+				button.btn.btn-default(ng-disabled="false", type="submit", ng-click="displayTrucksNearUser()") Nearby
+				//- only on large screens, status message appears next to search bar
+				label.flashMessage.hidden-xs.hidden-sm
+					{{flashMessage}}
+			//- on large screens, display button controls on top of table results
+			div.col-md-5.visible-md.visible-lg
+				div.row
+					div.col-md-2
+						button.btn.btn-default(ng-click="prevPage()", ng-disabled="!(currentPage > 0)") Prev
+					div.col-md-2
+						button.btn.btn-default(ng-click="nextPage()", ng-disabled="!hasMore()") Next
+					div.col-md-4.col-md-offset-3
+						button.btn.btn-link.infobutton(disabled) {{displayTotalLong()}}
+		div.row
+			div.col-md-7
+				gmap#map_canvas
+			//- on large screens, display results table on right of map
+			div.itemlist.col-md-5.visible-md.visible-lg
+				table.table
+					tr.item(truckItem, ng-repeat="truck in trucks")
+						td(ng-mouseenter="clickMarker(truck.srcid)", ng-click="clickMarker(truck.srcid)")
+							p
+								b {{truck.name}} 
+								span ({{truck.address}})
+							p {{truck.desc}}
+		//- on small screens, display button controls below the map
+		div.row.visible-xs.visible-sm
+			div.col-xs-5.col-sm-5
+				button.btn.btn-default.pull-left(ng-disabled="false", ng-click="refreshMarkers()") Redo search
+				label.flashMessage.pull-left
+					{{flashMessage}}
+			div.col-xs-7.col-sm-7
+				button.btn.btn-default.pull-right.pagingButton(ng-click="nextPage()", ng-disabled="!hasMore()") {{nextText()}}			
+				button.btn.btn-default.pull-right.pagingButton(ng-click="prevPage()", ng-disabled="!(currentPage > 0)") {{prevText()}}
+				span.pull-right.pagingText {{displayTotalShort()}}
+		//- on tablets, display results table below the map
+		div.row
+			div.itemlist.col-sm-12.visible-sm
+				table.table
+					tr.item(truckItem, ng-repeat="truck in trucks")
+						td(ng-mouseenter="clickMarker(truck.srcid)", ng-click="clickMarker(truck.srcid)")
+							p
+								b {{truck.name}} 
+								span ({{truck.address}})
+							p {{truck.desc}}
+		//- on large screens, display control to redo search on map move							
+		div.row.visible-md.visible-lg
+			div.col-md-12
+				div.checkbox
+					label
+						input(type="checkbox", ng-click="toggleAutoMove()", ng-model="autoMove")
+						| Refresh results when the map moves

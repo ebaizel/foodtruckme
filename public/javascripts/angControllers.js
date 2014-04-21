@@ -85,6 +85,7 @@ angular.module('truckApp.controllers', []).
 
 		// Creates the pins on the map
 		$scope.refreshMarkers = function() {
+			$scope.flashMessage = 'Locating...';			
 			$http({
 				method: 'GET',
 				url: '/truck?status=APPROVED&limit=' + $scope.limit + '&nelon=' + $scope.nelon + '&nelat=' + $scope.nelat
