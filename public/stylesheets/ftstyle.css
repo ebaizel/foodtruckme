@@ -40,13 +40,13 @@ body {
 }
 
 div.itemlist {
-	height: 500px;
+	height: 450px;
 	overflow: auto;
 }
 
 @media(min-width:768px){
 	#map_canvas{
-		height: 500px;
+		height: 450px;
 	}
 
 	.searchbar {
