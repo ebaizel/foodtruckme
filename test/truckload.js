@@ -1,11 +1,4 @@
 var expect = require('chai').expect;
-var models = require('../models');
-var mongoose = require('mongoose');
-
-var db = mongoose.createConnection('localhost/foodtrucktest');
-db.on('error', console.error.bind(console, 'connection error:'));
-global.Truck = db.model('Truck', models.truckSchema);
-
 var trucksvc = require('../service/truck');
 
 describe('Truck', function() {

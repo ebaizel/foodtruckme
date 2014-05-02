@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var models = require('./models');
 var creds = require('./creds');
 var dburi;
+var cluster = require('cluster');
 
 var getDB = function(uri) {
 	var db;
