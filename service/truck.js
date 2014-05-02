@@ -127,33 +127,39 @@ var loadDataFromJSON = function(data, cb) {
 
 	var truckArray = new Array();
 
-	for (var i=0; i < data.length; i++) {
-		var truck = data[i];
-		
-		var truckdata = {
-			srcid: truck.objectid,
-			loc: {
-				lon: truck.longitude,
-				lat: truck.latitude
-			},
-			desc: truck.fooditems,
-			status: truck.status,
-			name: truck.applicant,
-			address: truck.address,
-			created: new Date()
+	try {
+		for (var i=0; i < data.length; i++) {
+			var truck = data[i];
+			
+			var truckdata = {
+				srcid: truck.objectid,
+				loc: {
+					lon: truck.longitude,
+					lat: truck.latitude
+				},
+				desc: truck.fooditems,
+				status: truck.status,
+				name: truck.applicant,
+				address: truck.address,
+				created: new Date()
+			}
+
+			if (cleanAndValidateTruckData(truckdata)) {
+				truckArray.push(truckdata);
+			}
 		}
 
-		if (cleanAndValidateTruckData(truckdata)) {
-			truckArray.push(truckdata);
-		}
+		async.each(truckArray, insertTruck, function(err) {
+			if (err) {
+				console.log('Error loading data. ', err);
+			}
+			cb(err);
+		});
+	} catch (e) {
+		// Response was invalid; just continue
+		console.log('Exception happened parsing JSON response.', e);
+		cb(new Error('Exception parsing JSON response.'));
 	}
-
-	async.each(truckArray, insertTruck, function(err) {
-		if (err) {
-			console.log('Error loading data. ', err);
-		}
-		cb(err);
-	});
 }
 
 var cleanAndValidateTruckData = function(data) {
